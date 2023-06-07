@@ -46,9 +46,9 @@ def lidar(map,pos,nlaserbeam, fig,ax,r1,viz):
                     if within_range(ip, map[j,:]):
                         dist.append(np.sqrt((pos[0] - ip[0])**2  + (pos[1] - ip[1])**2))
                     else:
-                        dist.append(100)
+                        dist.append(5)
             else:
-                dist.append(100)
+                dist.append(5)
             # ax.scatter(ip[0],ip[1], c='red')
         lidardata[i] = min(dist)
         idx = dist.index(min(dist))
@@ -60,5 +60,5 @@ def lidar(map,pos,nlaserbeam, fig,ax,r1,viz):
             for i in range(map.shape[0]):
                 ax.plot([map[i,0],map[i,2]],[map[i,1],map[i,3]], c='black') 
             ax.scatter(pos[0],pos[1])
-
+    #print(lidardata)
     return lidardata

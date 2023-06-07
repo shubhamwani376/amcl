@@ -33,12 +33,16 @@ def on_move(event):
 
     if event.key=="d":
         r1.move_fwd()
+        particles[:,1] = particles[:,1] + 0.05
     elif event.key=="c":
         r1.move_back()
+        particles[:,1] = particles[:,1] - 0.05
     elif event.key=="x":
         r1.move_left()
+        particles[:,0] = particles[:,0] - 0.05
     elif event.key=="v":
         r1.move_right()
+        particles[:,0] = particles[:,0] + 0.05
     
     """if event.key=="d":
         r1y = r1y + 0.1
@@ -55,8 +59,16 @@ def on_move(event):
 
     pos = np.array([r1.x,r1.y,1], dtype=np.float64)
     ax.clear()
-    lidar.lidar(map,pos,nlaserbeam,fig,ax,r1,viz)
+    lidardata = lidar.lidar(map,pos,nlaserbeam,fig,ax,r1,viz)
     plt.show()
+
+    lidardatapart = np.ones((nparticles,nlaserbeam))*5
+    for k in range(particles.shape[0]):
+        if (particles[k,0] > 0 and particles[k,0] < 2 and particles[k,1] > 0 and particles[k,1] < 1):
+            pos1 = np.array([particles[k,0],particles[k,1],1])
+            lidardatapart[k,:] = lidar.lidar(map,pos1,nlaserbeam,fig,ax,r1,False)
+    print(lidardatapart)
+    
 
 class robot():
     def __init__(self, x, y):
@@ -84,8 +96,8 @@ class robot():
 if __name__ == '__main__':
 
     # Configuration variables
-    nlaserbeam = 23
-    nparticles = 300
+    nlaserbeam = 11
+    nparticles = 30
     particles = np.zeros((nparticles,2))
     nretention = 0.4
     
@@ -111,6 +123,7 @@ if __name__ == '__main__':
     viz = True
 
     lidardata = lidar.lidar(map,pos,nlaserbeam,fig,ax,r1,viz)
+    #print(lidardata)
 
     #binding_id = plt.connect('button_press_event', on_move)
     #plt.connect('button_press_event', on_click)
